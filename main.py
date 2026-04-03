@@ -10,7 +10,6 @@ else:
 
 # मॉडल का नाम यहाँ सही कर दिया है
 model = genai.GenerativeModel('gemini-1.5-flash')
-
  
 
 st.title("🤖 @TheSarkariMitra")
