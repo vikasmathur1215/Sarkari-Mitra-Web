@@ -1,45 +1,60 @@
+
 import streamlit as st
 import google.generativeai as genai
 
-# 1. API Setup
+# 1. API Setup (आपकी सुरक्षित चाबी)
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("Secrets में API Key नहीं मिली!")
+    st.error("System Error: API Key missing. Please contact administrator.")
     st.stop()
 
-st.title("🤖 @TheSarkariMitra - Model Checker")
+# 2. Latest 2026 Engine
+model = genai.GenerativeModel('gemini-2.5-flash')
 
-# 2. उपलब्ध मॉडल्स की लिस्ट चेक करना
-st.write(" भाई, आपके प्रोजेक्ट के लिए ये मॉडल्स उपलब्ध हैं:")
+# 3. Professional UI Design
+st.set_page_config(
+    page_title="TheSarkariMitra - Your Digital Assistant", 
+    page_icon="🇮🇳",
+    layout="centered"
+)
 
-try:
-    available_models = []
-    for m in genai.list_models():
-        if 'generateContent' in m.supported_generation_methods:
-            available_models.append(m.name)
-            st.code(m.name) # स्क्रीन पर नाम दिखाएगा
-            
-    if available_models:
-        st.success(f"कुल {len(available_models)} मॉडल्स मिल गए!")
-        # सबसे पहला वर्किंग मॉडल चुनना
-        selected_model = available_models[0]
-        st.info(f"हम ऑटोमैटिकली '{selected_model}' इस्तेमाल करेंगे।")
-    else:
-        st.warning("कोई भी मॉडल नहीं मिला। कृपया बिलिंग चेक करें।")
+# Header Section
+st.title("🇮🇳 @TheSarkariMitra")
+st.markdown("### आपका डिजिटल सरकारी सहायक")
+st.info("नमस्ते! मैं भारत की सरकारी योजनाओं और दस्तावेज़ों से जुड़ी जानकारी देने में आपकी मदद कर सकता हूँ।")
 
-except Exception as e:
-    st.error(f"चेक करने में गलती हुई: {e}")
+# 4. Chat History (बातचीत याद रखने के लिए)
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# 3. टेस्टिंग चैट (ताकि तुरंत पता चल जाए)
-if prompt := st.chat_input("अब यहाँ कुछ लिखकर टेस्ट करें..."):
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# 5. User Input & Professional Response
+if prompt := st.chat_input("अपनी सरकारी समस्या या सवाल यहाँ लिखें..."):
+    # यूजर का मैसेज
+    st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
-    
+
+    # एआई का प्रोफेशनल जवाब
     with st.chat_message("assistant"):
-        try:
-            model = genai.GenerativeModel(available_models[0])
-            response = model.generate_content(prompt)
-            st.markdown(response.text)
-        except Exception as e:
-            st.error(f"जवाब देने में दिक्कत: {e}")
+        with st.spinner("जानकारी खोजी जा रही है..."):
+            try:
+                # System Instruction: इसे अब 'Professional' बनाया गया है
+                system_instruction = (
+                    "तुम एक प्रोफेशनल और विनम्र सरकारी सहायक 'TheSarkariMitra' हो। "
+                    "यूजर का स्वागत 'नमस्ते' से करो (अगर बातचीत की शुरुआत हो)। "
+                    "भारत की सरकारी योजनाओं, आधार, पैन, राशन कार्ड और अन्य दस्तावेज़ों के बारे में "
+                    "एकदम सटीक और सरल हिंदी में जानकारी दो। जवाब को पॉइंट्स में लिखो ताकि पढ़ना आसान हो।"
+                )
+                
+                response = model.generate_content(f"{system_instruction}\n\nUser Question: {prompt}")
+                
+                st.markdown(response.text)
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+                
+            except Exception as e:
+                st.error("क्षमा करें, तकनीकी कारणों से जवाब नहीं मिल पाया। कृपया दोबारा प्रयास करें।")
