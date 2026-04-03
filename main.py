@@ -9,13 +9,12 @@ else:
     st.error("Secrets में चाबी नहीं मिली!")
     st.stop()
 
-# 2. Advanced Model (Billing के बाद अब Pro चलेगा)
+# 2.  Model Setup (सिर्फ नाम लिखें, 'models/' हटा दिया है)
 model = genai.GenerativeModel('gemini-1.5-pro')
-
 # 3. UI Design (वेबसाइट का चेहरा)
 st.set_page_config(page_title="TheSarkariMitra", page_icon="🤖")
 st.title("🤖 @TheSarkariMitra")
-st.write("नमस्ते विकाश भाई! मैं आपका प्रीमियम डिजिटल सरकारी सहायक हूँ।")
+st.write("नमस्ते भाई! मैं आपका प्रीमियम डिजिटल सरकारी सहायक हूँ।")
 
 # 4. Chat History (पुरानी बातें याद रखने के लिए)
 if "messages" not in st.session_state:
