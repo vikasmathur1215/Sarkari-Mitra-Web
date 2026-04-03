@@ -9,8 +9,10 @@ else:
     st.error("Secrets में चाबी नहीं मिली!")
     st.stop()
 
-# 2.  Model Setup (सिर्फ नाम लिखें, 'models/' हटा दिया है)
-model = genai.GenerativeModel('gemini-1.5-pro')
+# 2.  Latest 2026 Model (जैसा आपकी फोटो में बताया गया है)
+# हम 'gemini-2.0-flash' इस्तेमाल कर रहे हैं जो सबसे तेज़ है
+model = genai.GenerativeModel('gemini-2.0-flash')
+
 # 3. UI Design (वेबसाइट का चेहरा)
 st.set_page_config(page_title="TheSarkariMitra", page_icon="🤖")
 st.title("🤖 @TheSarkariMitra")
