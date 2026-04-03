@@ -11,7 +11,7 @@ else:
 
 # 2. Model Setup (बिना किसी एक्स्ट्रा सेटिंग के, ताकि Error न आए)
 # हमने मॉडल का नाम एकदम सरल रखा है: 'gemini-1.5-flash'
-model = genai.GenerativeModel('gemini-1.5-flash')
+gemini-1.5-flash-latest 
 
 # 3. UI Setup (आपका ब्रांड नाम)
 st.set_page_config(page_title="TheSarkariMitra", page_icon="🤖")
