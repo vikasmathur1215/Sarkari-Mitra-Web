@@ -11,7 +11,7 @@ else:
 st.title("🤖 @TheSarkariMitra - Model Checker")
 
 # 2. उपलब्ध मॉडल्स की लिस्ट चेक करना
-st.write("विकाश भाई, आपके प्रोजेक्ट के लिए ये मॉडल्स उपलब्ध हैं:")
+st.write(" भाई, आपके प्रोजेक्ट के लिए ये मॉडल्स उपलब्ध हैं:")
 
 try:
     available_models = []
