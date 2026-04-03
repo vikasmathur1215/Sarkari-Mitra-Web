@@ -2,29 +2,41 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. API Setup (आपकी सुरक्षित चाबी)
+# 1. API Setup
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("System Error: API Key missing. Please contact administrator.")
+    st.error("System configuration error. Please check secrets.")
     st.stop()
 
-# 2. Latest 2026 Engine
+# 2. Engine Setup
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# 3. Professional UI Design
+# 3. Professional & Modern UI (यहाँ हमने सरकारी लुक हटा दिया है)
 st.set_page_config(
-    page_title="TheSarkariMitra - Your Digital Assistant", 
-    page_icon="🇮🇳",
+    page_title="TheSarkariMitra", 
+    page_icon="🤝", # एक दोस्ताना हाथ मिलाने वाला आइकन
     layout="centered"
 )
 
-# Header Section
-st.title("🇮🇳 @TheSarkariMitra")
-st.markdown("### आपका डिजिटल सरकारी सहायक")
-st.info("नमस्ते! मैं भारत की सरकारी योजनाओं और दस्तावेज़ों से जुड़ी जानकारी देने में आपकी मदद कर सकता हूँ।")
+# Custom CSS: थोड़ा और सुंदर बनाने के लिए
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f5f7f9;
+    }
+    .stChatMessage {
+        border-radius: 15px;
+    }
+    </style>
+    """, unsafe_allow_status=True)
 
-# 4. Chat History (बातचीत याद रखने के लिए)
+# Header: अब यह सरकारी नहीं, हेल्पफुल लग रहा है
+st.title("TheSarkariMitra")
+st.subheader("आपकी उलझनें, हमारा समाधान।")
+st.write("दस्तावेज़ों और सरकारी प्रक्रियाओं को समझना अब हुआ आसान। अपना सवाल नीचे लिखें।")
+
+# 4. Chat History
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -32,29 +44,28 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 5. User Input & Professional Response
-if prompt := st.chat_input("अपनी सरकारी समस्या या सवाल यहाँ लिखें..."):
-    # यूजर का मैसेज
+# 5. Friendly AI Logic
+if prompt := st.chat_input("यहाँ अपना सवाल पूछें (जैसे: पैन कार्ड कैसे सुधारें?)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # एआई का प्रोफेशनल जवाब
     with st.chat_message("assistant"):
-        with st.spinner("जानकारी खोजी जा रही है..."):
+        with st.spinner("सोच रहा हूँ..."):
             try:
-                # System Instruction: इसे अब 'Professional' बनाया गया है
-                system_instruction = (
-                    "तुम एक प्रोफेशनल और विनम्र सरकारी सहायक 'TheSarkariMitra' हो। "
-                    "यूजर का स्वागत 'नमस्ते' से करो (अगर बातचीत की शुरुआत हो)। "
-                    "भारत की सरकारी योजनाओं, आधार, पैन, राशन कार्ड और अन्य दस्तावेज़ों के बारे में "
-                    "एकदम सटीक और सरल हिंदी में जानकारी दो। जवाब को पॉइंट्स में लिखो ताकि पढ़ना आसान हो।"
+                # Instruction: यहाँ हमने 'सरकारी' शब्द कम कर दिया है और 'मित्र' भाव बढ़ाया है
+                friendly_instruction = (
+                    "तुम 'TheSarkariMitra' हो—एक भरोसेमंद दोस्त जो लोगों को सरकारी कागजी कार्रवाई में मदद करता है। "
+                    "तुम्हारी भाषा बहुत ही सरल, विनम्र और मददगार होनी चाहिए। "
+                    "जवाब ऐसे दो जैसे एक बड़ा भाई छोटे भाई को समझा रहा हो। "
+                    "ज़्यादा स्टिकर्स मत यूज़ करो, बस ज़रूरत पड़ने पर 1-2 अच्छे आइकन लगाओ। "
+                    "अगर किसी को प्रक्रिया समझानी हो, तो उसे स्टेप-दर-स्टेप (1, 2, 3) बताओ।"
                 )
                 
-                response = model.generate_content(f"{system_instruction}\n\nUser Question: {prompt}")
+                response = model.generate_content(f"{friendly_instruction}\n\nयूजर का सवाल: {prompt}")
                 
                 st.markdown(response.text)
                 st.session_state.messages.append({"role": "assistant", "content": response.text})
                 
             except Exception as e:
-                st.error("क्षमा करें, तकनीकी कारणों से जवाब नहीं मिल पाया। कृपया दोबारा प्रयास करें।")
+                st.error("माफ़ी चाहता हूँ, अभी सिस्टम थोड़ा बिज़ी है। एक बार फिर कोशिश करेंगे?")
