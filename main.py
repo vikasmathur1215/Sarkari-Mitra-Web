@@ -12,7 +12,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 
 # 🤖 Model setup
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 # 🎨 UI
 st.set_page_config(page_title="The Sarkari Mitra", page_icon="⚖️")
