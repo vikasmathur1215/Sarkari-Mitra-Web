@@ -9,7 +9,8 @@ else:
     st.stop()
 
 # मॉडल का नाम यहाँ सही कर दिया है
-model = genai.GenerativeModel('gemini-1.5-flash-latest')
+model = genai.GenerativeModel('gemini-pro')
+ 
 
 st.title("🤖 @TheSarkariMitra")
 st.write("नमस्ते! मैं आपका डिजिटल सरकारी सहायक हूँ।")
