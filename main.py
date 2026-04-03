@@ -8,8 +8,7 @@ else:
     st.error("Secrets में चाबी नहीं मिली!")
     st.stop()
 
-# 2. Model Setup (यहीं पर 'model' डिफाइन किया है, अब Error नहीं आएगा)
-model = genai.GenerativeModel('gemini-1.5-flash')
+# 2. gemini-3.1-flash-live-preview
 
 # 3. UI Setup
 st.set_page_config(page_title="TheSarkariMitra", page_icon="🤖")
