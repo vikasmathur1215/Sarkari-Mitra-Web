@@ -74,18 +74,14 @@ if "user_name" not in st.session_state:
 
 # अगर यूजर का नाम नहीं पता, तो पहले यह फॉर्म दिखाओ
 if not st.session_state.user_name:
-    st.title("🧭 Sarthi AI")
-    st.write("---")
-    st.subheader("नमस्ते! सारथी को शुरू करने के लिए अपनी जानकारी दें")
-    
-    # यूजर से जानकारी लेना
-    with st.container():
-        name = st.text_input("आपका शुभ नाम (Full Name)")
-        mobile = st.text_input("मोबाइल नंबर (Mobile Number)")
-        
-        if st.button("सारथी को शुरू करें 🚀"):
-            if name and mobile:
-                st.session_state.user_name = name
+    # --- मिशन: डायरेक्ट चैट शुरू करें ---
+st.title("Sarthi AI 🧭")
+st.markdown("### आपकी सेवा में हाज़िर! नमस्ते भाई, मैं आपकी क्या मदद कर सकता हूँ?")
+
+# अगर आप चाहते हैं कि यूजर का नाम 'Guest' रहे
+if "user_name" not in st.session_state:
+    st.session_state.user_name = "दोस्त"
+
                 st.session_state.user_mobile = mobile
                 
                 # --- व्हाट्सएप सेटअप (918077274671) ---
