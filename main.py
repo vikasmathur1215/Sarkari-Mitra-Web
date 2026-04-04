@@ -1,5 +1,5 @@
 
-Import streamlit as st
+import streamlit as st
 import google.generativeai as genai
 
 # 1. API Setup
