@@ -1,59 +1,83 @@
-
 import streamlit as st
 import google.generativeai as genai
+from PIL import Image
 
-# 1. API Setup
+# 1. API Setup (Sarthi AI Engine)
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("System Error: API Key missing.")
+    st.error("Setup Error: API Key missing in Secrets.")
     st.stop()
 
-# 2. Engine Setup (Gemini 2.5)
-model = genai.GenerativeModel('gemini-2.5-flash')
+# Vision Model for Photos & Chat
+model = genai.GenerativeModel('gemini-1.5-flash')
 
-# 3. Modern UI Setup (बिना किसी स्टाइल एरर के)
-st.set_page_config(
-    page_title="TheSarkariMitra", 
-    page_icon="🤝",
-    layout="centered"
-)
+# 2. Page Config (Professional Look)
+st.set_page_config(page_title="Sarthi AI", page_icon="🧭", layout="centered")
 
-# Header Section
-st.title("TheSarkariMitra")
-st.markdown("### आपकी उलझनें, हमारा समाधान।")
-st.write("दस्तावेज़ों और सरकारी प्रक्रियाओं को समझना अब हुआ आसान।")
+# Custom CSS for "The Vikas Touch"
+st.markdown("""
+    <style>
+    .stChatMessage { border-radius: 15px; padding: 10px; margin-bottom: 8px; }
+    .stChatInputContainer { padding-bottom: 20px; }
+    header {visibility: hidden;} /* Clean look like ChatGPT */
+    </style>
+    """, unsafe_allow_html=True)
 
-# 4. Chat History
+# Sidebar for Identity
+with st.sidebar:
+    st.title("🧭 Sarthi AI")
+    st.write("---")
+    st.write("Created with ❤️ by **Vikas Mathur**")
+    st.caption("Identity: Unknown_shayar1215")
+    if st.button("New Chat +"):
+        st.session_state.messages = []
+        st.rerun()
+
+# 3. Chat Logic
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Display chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 5. User Input & Friendly Response
-if prompt := st.chat_input("अपना सवाल यहाँ पूछें..."):
-    # यूजर का सवाल दिखाना
+# 4. Input Area (Text + Photo)
+col1, col2 = st.columns([0.85, 0.15])
+with col2:
+    uploaded_file = st.file_uploader("📷", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+
+if prompt := st.chat_input("भाई/बहन, अपनी समस्या यहाँ लिखें..."):
+    # User message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # एआई का दोस्ताना जवाब
+    # AI Response
     with st.chat_message("assistant"):
         try:
-            # AI के लिए एकदम क्लियर और फ्रेंडली निर्देश
-            system_msg = (
-                "तुम 'TheSarkariMitra' हो—एक भरोसेमंद और विनम्र दोस्त। "
-                "फालतू स्टिकर्स का इस्तेमाल मत करो। "
-                "जवाब बहुत ही सरल हिंदी में और पॉइंट्स (1, 2, 3) में दो। "
-                "कोशिश करो कि जवाब ऐसा लगे जैसे कोई अपना सलाह दे रहा हो।"
+            # System Instructions: यह है असली 'Sarthi' का दिमाग
+            system_prompt = (
+                "तुम्हारा नाम 'Sarthi AI' है और तुम्हें विकास माथुर (Unknown_shayar1215) ने बनाया है। "
+                "तुम्हें यूजर से एकदम वैसे ही बात करनी है जैसे दो दोस्त करते हैं। "
+                "भाषा शुद्ध हिंदी नहीं, बल्कि Hinglish होनी चाहिए। "
+                "यूजर के लिखने के अंदाज़ से पहचानो कि वो लड़का है या लड़की। "
+                "अगर लड़का है तो 'भाई', 'रहा है' और लड़की है तो 'बहन', 'रही है' का इस्तेमाल करो। "
+                "जवाब छोटे, टू-द-पॉइंट और मददगार होने चाहिए। "
+                "फालतू स्टिकर्स मत लगाओ, बस 1-2 ज़रूरी आइकन काफी हैं।"
             )
-            
-            response = model.generate_content(f"{system_msg}\n\nयूजर का सवाल: {prompt}")
-            
+
+            # Handling Image + Text
+            if uploaded_file:
+                img = Image.open(uploaded_file)
+                response = model.generate_content([system_prompt + prompt, img])
+            else:
+                response = model.generate_content(f"{system_prompt}\n\nUser: {prompt}")
+
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-            
+
         except Exception as e:
-            st.error("माफ़ी चाहता हूँ, अभी सिस्टम थोड़ा बिज़ी है।")
+            st.error("थोड़ी दिक्कत आ रही है भाई, एक बार फिर कोशिश करें?")
+
