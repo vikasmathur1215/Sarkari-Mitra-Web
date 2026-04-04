@@ -73,14 +73,10 @@ if "user_name" not in st.session_state:
     st.session_state.user_name = None
 
 # अगर यूजर का नाम नहीं पता, तो पहले यह फॉर्म दिखाओ
-if not st.session_state.user_name:
-    # --- मिशन: डायरेक्ट चैट शुरू करें ---
-st.title("Sarthi AI 🧭")
-st.markdown("### आपकी सेवा में हाज़िर! नमस्ते भाई, मैं आपकी क्या मदद कर सकता हूँ?")
-
-# अगर आप चाहते हैं कि यूजर का नाम 'Guest' रहे
-if "user_name" not in st.session_state:
-    st.session_state.user_name = "दोस्त"
+File "/mount/src/sarkari-mitra-web/main.py", line 78
+  st.title("Sarthi AI 🧭")
+  ^
+IndentationError: expected an indented block after 'if' statement on line 76
 
                 st.session_state.user_mobile = mobile
                 
