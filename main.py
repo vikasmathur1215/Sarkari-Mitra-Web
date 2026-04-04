@@ -68,17 +68,13 @@ else:
 # 2. Session State Initialize (Isse AttributeError khatam hoga)
 if "messages" not in st.session_state:
     st.session_state.messages = []
-# --- मिशन 4: यूजर की पहचान (Memory Setup) ---
+# --- मिशन: डायरेक्ट चैट शुरू करें (सफ़ाई के बाद) ---
 if "user_name" not in st.session_state:
-    st.session_state.user_name = None
+    st.session_state.user_name = "दोस्त"
 
-# अगर यूजर का नाम नहीं पता, तो पहले यह फॉर्म दिखाओ
-File "/mount/src/sarkari-mitra-web/main.py", line 78
-  st.title("Sarthi AI 🧭")
-  ^
-IndentationError: expected an indented block after 'if' statement on line 76
+st.title("Sarthi AI 🧭")
+st.markdown("### आपकी सेवा में हाज़िर! नमस्ते भाई, मैं आपकी क्या मदद कर सकता हूँ?")
 
-                st.session_state.user_mobile = mobile
                 
                 # --- व्हाट्सएप सेटअप (918077274671) ---
                 your_number = "918077274671" 
