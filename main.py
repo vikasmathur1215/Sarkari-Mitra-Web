@@ -2,82 +2,82 @@ import streamlit as st
 import google.generativeai as genai
 from PIL import Image
 
-# 1. API Setup (Sarthi AI Engine)
+# 1. API Setup
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("Setup Error: API Key missing in Secrets.")
+    st.error("API Key missing.")
     st.stop()
 
-# Vision Model for Photos & Chat
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# 2. Page Config (Professional Look)
+# 2. Page Setup & ChatGPT-like CSS
 st.set_page_config(page_title="Sarthi AI", page_icon="🧭", layout="centered")
 
-# Custom CSS for "The Vikas Touch"
 st.markdown("""
     <style>
-    .stChatMessage { border-radius: 15px; padding: 10px; margin-bottom: 8px; }
-    .stChatInputContainer { padding-bottom: 20px; }
-    header {visibility: hidden;} /* Clean look like ChatGPT */
+    /* चैट बॉक्स को राउंड और सुंदर बनाने के लिए */
+    .stChatMessage { border-radius: 20px; margin-bottom: 10px; border: none !important; }
+    
+    /* इनपुट बार को नीचे फिक्स करने के लिए */
+    .stChatInputContainer {
+        padding-bottom: 20px;
+        background-color: transparent !important;
+    }
+    
+    /* फालतू हेडर हटाने के लिए */
+    header {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* बैकग्राउंड को थोड़ा डार्क या साफ रखने के लिए */
+    .main { background-color: #ffffff; }
     </style>
     """, unsafe_allow_html=True)
 
-# Sidebar for Identity
+# 3. Sidebar (Identity)
 with st.sidebar:
     st.title("🧭 Sarthi AI")
+    st.subheader("Vikas Mathur")
+    st.caption("Unknown_shayar1215")
     st.write("---")
-    st.write("Created with ❤️ by **Vikas Mathur**")
-    st.caption("Identity: Unknown_shayar1215")
     if st.button("New Chat +"):
         st.session_state.messages = []
         st.rerun()
 
-# 3. Chat Logic
+# 4. Chat logic
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat history
+# Display History
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. Input Area (Text + Photo)
-col1, col2 = st.columns([0.85, 0.15])
-with col2:
-    uploaded_file = st.file_uploader("📷", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
+# 5. Image & Text Input (The "Photo Icon" Feature)
+# यहाँ हम प्लस बटन की जगह फाइल अपलोडर दे रहे हैं जो इनपुट के ठीक ऊपर दिखेगा
+with st.expander("➕ Add Image/Document"):
+    uploaded_file = st.file_uploader("Upload photo for Sarthi to see", type=["jpg", "png", "jpeg"], label_visibility="collapsed")
 
-if prompt := st.chat_input("भाई/बहन, अपनी समस्या यहाँ लिखें..."):
-    # User message
+if prompt := st.chat_input("Ask Sarthi AI..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # AI Response
     with st.chat_message("assistant"):
         try:
-            # System Instructions: यह है असली 'Sarthi' का दिमाग
-            system_prompt = (
-                "तुम्हारा नाम 'Sarthi AI' है और तुम्हें विकास माथुर (Unknown_shayar1215) ने बनाया है। "
-                "तुम्हें यूजर से एकदम वैसे ही बात करनी है जैसे दो दोस्त करते हैं। "
-                "भाषा शुद्ध हिंदी नहीं, बल्कि Hinglish होनी चाहिए। "
-                "यूजर के लिखने के अंदाज़ से पहचानो कि वो लड़का है या लड़की। "
-                "अगर लड़का है तो 'भाई', 'रहा है' और लड़की है तो 'बहन', 'रही है' का इस्तेमाल करो। "
-                "जवाब छोटे, टू-द-पॉइंट और मददगार होने चाहिए। "
-                "फालतू स्टिकर्स मत लगाओ, बस 1-2 ज़रूरी आइकन काफी हैं।"
-            )
-
-            # Handling Image + Text
+            # Sarthi's Personal Instructions
+            sys_msg = "तुम Sarthi AI हो, जिसे विकास माथुर ने बनाया है। एकदम Hinglish में भाई/बहन बोलकर बात करो।"
+            
             if uploaded_file:
                 img = Image.open(uploaded_file)
-                response = model.generate_content([system_prompt + prompt, img])
+                response = model.generate_content([sys_msg + "\n" + prompt, img])
+                st.image(img, caption="Analyzed by Sarthi", width=200)
             else:
-                response = model.generate_content(f"{system_prompt}\n\nUser: {prompt}")
+                response = model.generate_content(f"{sys_msg}\nUser: {prompt}")
 
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-
+            
         except Exception as e:
-            st.error("थोड़ी दिक्कत आ रही है भाई, एक बार फिर कोशिश करें?")
-
+            st.error("सर्वर थोड़ा बिज़ी है भाई, दोबारा ट्राई करें?")
