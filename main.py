@@ -35,6 +35,13 @@ with col1:
     if st.button("📄 Resume"):
         # यह बटन दबाते ही चैट में अपने आप लिखा जाएगा
         st.session_state.messages.append({"role": "user", "content": "मुझे एक जॉब के लिए प्रोफेशनल Resume बनाना है, मेरी मदद करो।"})
+        # --- Quick Buttons (Is hisse ko line 30 se 48 tak replace karein) ---
+st.write("---") 
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("📄 Resume"):
+        st.session_state.messages.append({"role": "user", "content": "मुझे एक जॉब के लिए प्रोफेशनल Resume बनाना है, मेरी मदद करो।"})
         st.rerun()
 
 with col2:
@@ -46,6 +53,8 @@ with col3:
     if st.button("📜 Affidavit"):
         st.session_state.messages.append({"role": "user", "content": "मुझे एक सामान्य Affidavit का फॉर्मेट चाहिए।"})
         st.rerun()
+# -----------------------------------------------------------------
+
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
