@@ -79,23 +79,8 @@ st.markdown("### आपकी सेवा में हाज़िर! नमस�
                 # 
                 
                 # सुंदर व्हाट्सएप बटन st.markdown(f"""
-                    <div style="text-align: center; margin-top: 20px;">
-                        <a href="{wa_url}" target="_blank" style="text-decoration: none;">
-                            <button style="width:100%; padding:15px; background-color:#25D366; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer;">
-                                ✅ Sarthi Support से व्हाट्सएप पर जुड़ें
-                            </button>
-                        </a>
-                        <p style="margin-top:10px; color:#666;">(ऊपर बटन पर क्लिक करके व्हाट्सएप पर जुड़ें)</p>
-                    </div>
-                """, unsafe_allow_html=True)
-                
-                # एक बटन जिसे दबाकर ऐप शुरू होगा
-                if st.button("चैट शुरू करें 👇"):
-                    st.rerun()
-            else:
-                st.warning("कृपया नाम और नंबर दोनों भरें।")
-    
-    st.stop() # यह लाइन 64 पर ही रहेगी
+                    
+                                
 
 # 3. UI Setup
 st.set_page_config(page_title="Sarthi AI", page_icon="🧭")
