@@ -54,14 +54,35 @@ if not st.session_state.user_name:
         name = st.text_input("आपका शुभ नाम (Full Name)")
         mobile = st.text_input("मोबाइल नंबर (Mobile Number)")
         
-        if st.button("सारथी को शुरू करें 🚀"):
+                if st.button("सारथी को शुरू करें 🚀"):
             if name and mobile:
                 st.session_state.user_name = name
                 st.session_state.user_mobile = mobile
-                st.rerun()
+                
+                # --- व्हाट्सएप सेटअप (918077274671) ---
+                your_number = "918077274671" 
+                wa_msg = f"नमस्ते Sarthi Admin, मेरा नाम {name} है (मोबाइल: {mobile})। मैंने अभी सारथी ऐप खोला है।"
+                wa_url = f"https://wa.me/{your_number}?text={wa_msg.replace(' ', '%20')}"
+                
+                # सुंदर व्हाट्सएप बटन
+                st.markdown(f"""
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="{wa_url}" target="_blank" style="text-decoration: none;">
+                            <button style="width:100%; padding:15px; background-color:#25D366; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer;">
+                                ✅ Sarthi Support से व्हाट्सएप पर जुड़ें
+                            </button>
+                        </a>
+                        <p style="margin-top:10px; color:#666;">(ऊपर बटन पर क्लिक करके व्हाट्सएप पर जुड़ें)</p>
+                    </div>
+                """, unsafe_allow_html=True)
+                
+                # एक बटन जिसे दबाकर ऐप शुरू होगा
+                if st.button("चैट शुरू करें 👇"):
+                    st.rerun()
             else:
                 st.warning("कृपया नाम और नंबर दोनों भरें।")
-    st.stop() # जब तक फॉर्म न भरे, नीचे का कोड न चले
+    
+    st.stop() # यह लाइन 64 पर ही रहेगी
 
 # 3. UI Setup
 st.set_page_config(page_title="Sarthi AI", page_icon="🧭")
