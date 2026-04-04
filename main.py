@@ -38,7 +38,13 @@ with col3:
 if button_prompt:
     st.session_state.messages.append({"role": "user", "content": button_prompt})
     # AI Response Trigger
-    system_msg = "तुम Sarthi AI हो—एक भरोसेमंद सहायक। जवाब सरल Hinglish और पॉइंट्स में दो।"
+                system_msg = (
+                "तुम 'Sarthi AI' हो। अगर कोई Resume मांगे, तो उससे नाम, पढ़ाई और अनुभव पूछो। "
+                "अगर Rent Draft मांगे, तो मकान मालिक-किराएदार का नाम पूछो। "
+                "जवाब सरल Hinglish में और पॉइंट्स में दो।"
+            )
+
+
     response = model.generate_content(f"{system_msg}\n\nUser: {button_prompt}")
     st.session_state.messages.append({"role": "assistant", "content": response.text})
     st.rerun()
