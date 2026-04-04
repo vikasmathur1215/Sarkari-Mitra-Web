@@ -39,6 +39,29 @@ else:
 # 2. Session State Initialize (Isse AttributeError khatam hoga)
 if "messages" not in st.session_state:
     st.session_state.messages = []
+# --- मिशन 4: यूजर की पहचान (Memory Setup) ---
+if "user_name" not in st.session_state:
+    st.session_state.user_name = None
+
+# अगर यूजर का नाम नहीं पता, तो पहले यह फॉर्म दिखाओ
+if not st.session_state.user_name:
+    st.title("🧭 Sarthi AI")
+    st.write("---")
+    st.subheader("नमस्ते! सारथी को शुरू करने के लिए अपनी जानकारी दें")
+    
+    # यूजर से जानकारी लेना
+    with st.container():
+        name = st.text_input("आपका शुभ नाम (Full Name)")
+        mobile = st.text_input("मोबाइल नंबर (Mobile Number)")
+        
+        if st.button("सारथी को शुरू करें 🚀"):
+            if name and mobile:
+                st.session_state.user_name = name
+                st.session_state.user_mobile = mobile
+                st.rerun()
+            else:
+                st.warning("कृपया नाम और नंबर दोनों भरें।")
+    st.stop() # जब तक फॉर्म न भरे, नीचे का कोड न चले
 
 # 3. UI Setup
 st.set_page_config(page_title="Sarthi AI", page_icon="🧭")
