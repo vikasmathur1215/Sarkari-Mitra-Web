@@ -47,16 +47,19 @@ with col3:
 # अगर कोई बटन दबाया गया है, तो उसे चैट इनपुट की तरह इस्तेमाल करें
 if button_prompt:
     st.session_state.messages.append({"role": "user", "content": button_prompt})
+    # --- बटन दबाने पर AI जवाब देगा (Line 50 to 60 replace karein) ---
+if button_prompt:
+    st.session_state.messages.append({"role": "user", "content": button_prompt})
     with st.chat_message("user"):
         st.markdown(button_prompt)
     
     with st.chat_message("assistant"):
-        # यहाँ एआई को कॉल किया जा रहा है
         system_msg = "तुम Sarthi AI हो। सरल Hinglish में जवाब दो।"
         response = model.generate_content(f"{system_msg}\n\nUser: {button_prompt}")
         st.markdown(response.text)
         st.session_state.messages.append({"role": "assistant", "content": response.text})
     st.rerun()
+
 
 
 
