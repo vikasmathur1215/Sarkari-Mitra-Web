@@ -25,6 +25,16 @@ st.markdown("""
         padding: 10px;
         margin-bottom: 10px;
     }
+    /* नीचे का लाल लोगो और फोटो छिपाने के लिए */
+    footer {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    
+    /* मोबाइल पर नीचे की खाली जगह कम करने के लिए */
+    .stApp {
+        bottom: 0px;
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
