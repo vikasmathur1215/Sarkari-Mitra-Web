@@ -76,10 +76,7 @@ st.title("Sarthi AI 🧭")
 st.markdown("### आपकी सेवा में हाज़िर! नमस्ते भाई, मैं आपकी क्या मदद कर सकता हूँ?")
 
                 
-                # --- व्हाट्सएप सेटअप (918077274671) ---
-                your_number = "918077274671" 
-                wa_msg = f"नमस्ते Sarthi Admin, मेरा नाम {name} है (मोबाइल: {mobile})। मैंने अभी सारथी ऐप खोला है।"
-                wa_url = f"https://wa.me/{your_number}?text={wa_msg.replace(' ', '%20')}"
+                # 
                 
                 # सुंदर व्हाट्सएप बटन
                 st.markdown(f"""
