@@ -54,7 +54,7 @@ if not st.session_state.user_name:
         name = st.text_input("आपका शुभ नाम (Full Name)")
         mobile = st.text_input("मोबाइल नंबर (Mobile Number)")
         
-                if st.button("सारथी को शुरू करें 🚀"):
+        if st.button("सारथी को शुरू करें 🚀"):
             if name and mobile:
                 st.session_state.user_name = name
                 st.session_state.user_mobile = mobile
