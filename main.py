@@ -1,26 +1,30 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. API Setup (Nayi Key yaha automatically connect hogi)
+# 1. API Setup
 if "GEMINI_API_KEY" in st.secrets:
-    try:
-        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # 'gemini-1.5-flash' sabse fast aur stable hai
-        model = genai.GenerativeModel('gemini-1.5-flash')
-    except Exception as e:
-        st.error(f"API Setup Error: {e}")
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("Secrets में नई चाबी नहीं मिली भाई!")
+    st.error("System Error: API Key missing.")
     st.stop()
 
-# 2. UI Setup (Professional Look)
-st.set_page_config(page_title="Sarthi AI", page_icon="🧭", layout="centered")
+# 2. Engine Setup (Wahi purana stable model)
+model = genai.GenerativeModel('gemini-pro') 
 
+# 3. UI Setup
+st.set_page_config(
+    page_title="Sarthi AI", 
+    page_icon="🧭",
+    layout="centered"
+)
+
+# Header Section
 st.title("Sarthi AI 🧭")
 st.markdown("### आपकी उलझनें, हमारा समाधान।")
-st.caption("Developed by Vikas Mathur (Unknown_shayar1215)")
+st.write("दस्तावेज़ों और सरकारी प्रक्रियाओं को समझना अब हुआ आसान।")
+st.caption("Created by Vikas Mathur (Unknown_shayar1215)")
 
-# 3. Chat History
+# 4. Chat History
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -28,26 +32,27 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 4. User Input & Response
-if prompt := st.chat_input("भाई/बहन, यहाँ अपना सवाल पूछें..."):
+# 5. User Input & Friendly Response
+if prompt := st.chat_input("अपना सवाल यहाँ पूछें..."):
+    # यूजर का सवाल दिखाना
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # एआई का दोस्ताना जवाब
     with st.chat_message("assistant"):
         try:
-            # Sarthi AI Dimag (Personalized Hinglish)
+            # Sarthi AI के लिए क्लियर निर्देश
             system_msg = (
-                "तेरा नाम 'Sarthi AI' है और तुझे विकास माथुर ने बनाया है। "
-                "तू एकदम Hinglish में बात कर। यूजर के अंदाज़ से पहचान कि वो लड़का है या लड़की। "
-                "लड़के को 'भाई' और लड़की को 'बहन' बोल। जवाब बहुत ही दोस्ताना और पॉइंट्स में दे।"
+                "तुम 'Sarthi AI' हो—एक भरोसेमंद और विनम्र दोस्त जिसे विकास माथुर ने बनाया है। "
+                "जवाब बहुत ही सरल Hinglish में और पॉइंट्स (1, 2, 3) में दो। "
+                "कोशिश करो कि जवाब ऐसा लगे जैसे कोई अपना भाई/दोस्त सलाह दे रहा हो।"
             )
-            
-            response = model.generate_content(f"{system_msg}\n\nUser: {prompt}")
-            
+
+            response = model.generate_content(f"{system_msg}\n\nयूजर का सवाल: {prompt}")
+
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-            
+
         except Exception as e:
-            # Asli bimari yaha dikhegi agar abhi bhi error aaye
-            st.error(f"ओह! गूगल ने ये कहा है भाई: {e}")
+            st.error("माफ़ी चाहता हूँ भाई, सिस्टम थोड़ा बिज़ी है। एक बार दोबारा कोशिश करें?")
