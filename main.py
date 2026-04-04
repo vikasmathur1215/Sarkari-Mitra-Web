@@ -78,8 +78,7 @@ st.markdown("### आपकी सेवा में हाज़िर! नमस�
                 
                 # 
                 
-                # सुंदर व्हाट्सएप बटन
-                st.markdown(f"""
+                # सुंदर व्हाट्सएप बटन st.markdown(f"""
                     <div style="text-align: center; margin-top: 20px;">
                         <a href="{wa_url}" target="_blank" style="text-decoration: none;">
                             <button style="width:100%; padding:15px; background-color:#25D366; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer;">
