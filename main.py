@@ -24,22 +24,34 @@ st.markdown("""
         border-radius: 15px;
         padding: 10px;
         margin-bottom: 10px;
+        /* 🚀 मिशन: लाल लोगो और प्रोफाइल फोटो का सफाया */
+    
+    /* 1. नीचे की पूरी पट्टी (Footer) को जड़ से मिटाना */
+    footer {display: none !important;}
+    header {display: none !important;}
+    
+    /* 2. स्ट्रीमलिट का लाल लोगो और 'Hosted with' टेक्स्ट */
+    div[data-testid="stStatusWidget"],
+    .stAppViewFooter,
+    .st-emotion-cache-1vt4y6f,
+    .st-emotion-cache-12fmjuu {
+        display: none !important;
+        height: 0px !important;
     }
-        /* नया और पक्का समाधान: लोगो और फोटो को जड़ से हटाना */
-    [data-testid="stStatusWidget"], 
-    header, 
-    footer, 
-    #MainMenu,
-    .stApp > header,
-    div[data-testid="stToolbar"] {
+
+    /* 3. आपकी प्रोफाइल फोटो वाला बटन (Toolbar) */
+    div[data-testid="stToolbar"],
+    #MainMenu {
         display: none !important;
         visibility: hidden !important;
     }
 
-    /* मोबाइल पर स्क्रीन को पूरा भरने के लिए */
+    /* 4. स्क्रीन के नीचे की फालतू जगह खत्म करना */
     .stApp {
         bottom: 0px !important;
+        padding-bottom: 0px !important;
     }
+
 
 
     </style>
