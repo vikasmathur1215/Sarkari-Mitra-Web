@@ -4,7 +4,7 @@ import google.generativeai as genai
 # 1. API Setup
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
 else:
     st.error("System Error: API Key missing.")
     st.stop()
