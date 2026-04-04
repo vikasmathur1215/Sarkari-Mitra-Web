@@ -1,45 +1,25 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. API Setup
+# 1. API Setup (Isme ab hum error detail bhi dekhenge)
 if "GEMINI_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    try:
+        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+        model = genai.GenerativeModel('gemini-1.5-flash')
+    except Exception as e:
+        st.error(f"API Setup Error: {e}")
 else:
-    st.error("API Key missing.")
+    st.error("Secrets में API Key नहीं मिली भाई!")
     st.stop()
 
-# Engine: Gemini 1.5 Flash (Sabse fast aur stable)
-model = genai.GenerativeModel('gemini-1.5-flash')
+# 2. Page Setup
+st.set_page_config(page_title="Sarthi AI", page_icon="🧭")
 
-# 2. Page Config (ChatGPT Style)
-st.set_page_config(page_title="Sarthi AI", page_icon="🧭", layout="centered")
-
-# Custom CSS: Look badalne ke liye
-st.markdown("""
-    <style>
-    .stChatMessage { border-radius: 20px; border: none !important; }
-    header {visibility: hidden;}
-    .main { background-color: #ffffff; }
-    </style>
-    """, unsafe_allow_html=True)
-
-# 3. Instruction - Sarthi AI ka dimag
+# 3. Instruction
 system_instruction = (
-    "तेरा नाम 'Sarthi AI' है और तुझे विकास माथुर (Unknown_shayar1215) ने बनाया है। "
-    "तू शुद्ध हिंदी नहीं, बल्कि Hinglish में बात कर। "
-    "यूजर को 'भाई' या 'बहन' बोलकर एड्रेस कर। "
-    "जवाब छोटे और एकदम काम के होने चाहिए। "
-    "हमेशा याद दिला कि तू विकास का बनाया हुआ AI है।"
+    "तेरा नाम 'Sarthi AI' है और तुझे विकास माथुर ने बनाया है। "
+    "एकदम Hinglish में 'भाई/बहन' बोलकर जवाब दे।"
 )
-
-# Sidebar
-with st.sidebar:
-    st.title("🧭 Sarthi AI")
-    st.write("Created by: **Vikas Mathur**")
-    st.caption("Identity: Unknown_shayar1215")
-    if st.button("New Chat +"):
-        st.session_state.messages = []
-        st.rerun()
 
 # 4. Chat History
 if "messages" not in st.session_state:
@@ -49,20 +29,17 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 5. User Input (Clean Input like ChatGPT)
-if prompt := st.chat_input("भाई/बहन, यहाँ अपना सवाल पूछें..."):
+# 5. Input & Response
+if prompt := st.chat_input("भाई/बहन, यहाँ सवाल पूछें..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # AI Response
     with st.chat_message("assistant"):
         try:
-            # Simple text-based response to avoid server errors
             response = model.generate_content(f"{system_instruction}\n\nUser: {prompt}")
-            
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-            
         except Exception as e:
-            st.error("माफ़ी चाहता हूँ भाई, सर्वर अभी लोड नहीं ले पा रहा। एक बार दोबारा 'Hello' लिखो?")
+            # Asli error yaha dikhega
+            st.error(f"Error: {e}")
