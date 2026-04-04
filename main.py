@@ -1,30 +1,20 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai # अब हम नया तरीका इस्तेमाल करेंगे
 
-# 1. API Setup
+# 1. API Setup (Naya Tarika)
 if "GEMINI_API_KEY" in st.secrets:
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("System Error: API Key missing.")
+    st.error("Secrets में API Key नहीं मिली भाई!")
     st.stop()
 
-# 2. Engine Setup (Kal wala model jo chal rha tha)
-# Note: Agar 2.5 flash error de, to yaha 'gemini-1.5-flash' kar dena
-model = genai.GenerativeModel('gemini-1.5-flash')
+# 2. UI Setup
+st.set_page_config(page_title="Sarthi AI", page_icon="🧭")
 
-# 3. Modern UI Setup
-st.set_page_config(
-    page_title="Sarthi AI", 
-    page_icon="🧭",
-    layout="centered"
-)
-
-# Header Section
 st.title("Sarthi AI 🧭")
 st.markdown("### आपकी उलझनें, हमारा समाधान।")
-st.write("दस्तावेज़ों और सरकारी प्रक्रियाओं को समझना अब हुआ आसान।")
 
-# 4. Chat History
+# 3. Chat History
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -32,27 +22,28 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 5. User Input & Friendly Response
-if prompt := st.chat_input("अपना सवाल यहाँ पूछें..."):
-    # यूजर का सवाल दिखाना
+# 4. Input & Response
+if prompt := st.chat_input("भाई/बहन, यहाँ सवाल पूछें..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # एआई का दोस्ताना जवाब
     with st.chat_message("assistant"):
         try:
-            # Sarthi AI के लिए खास निर्देश (Hinglish + Friendliness)
-            system_msg = (
-                "तुम 'Sarthi AI' हो—एक भरोसेमंद और विनम्र दोस्त जिसे विकास माथुर (Unknown_shayar1215) ने बनाया है। "
-                "जवाब बहुत ही सरल Hinglish में और पॉइंट्स (1, 2, 3) में दो। "
-                "कोशिश करो कि जवाब ऐसा लगे जैसे कोई अपना भाई/दोस्त सलाह दे रहा हो।"
+            # Sarthi AI ka dimag (Hinglish + Friendliness)
+            instruction = (
+                "तेरा नाम 'Sarthi AI' है और तुझे विकास माथुर (Unknown_shayar1215) ने बनाया है। "
+                "एकदम Hinglish में भाई/बहन बोलकर जवाब दे। पॉइंट्स में समझा।"
             )
-
-            response = model.generate_content(f"{system_msg}\n\nयूजर का सवाल: {prompt}")
+            
+            # Naya AI Call (Gemini 2.0 Flash)
+            response = client.models.generate_content(
+                model="gemini-2.0-flash", 
+                contents=f"{instruction}\n\nUser: {prompt}"
+            )
 
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
-
+            
         except Exception as e:
-            st.error("माफ़ी चाहता हूँ भाई, सिस्टम थोड़ा बिज़ी है। एक बार दोबारा कोशिश करें?")
+            st.error(f"ओह! कुछ दिक्कत है भाई: {e}")
