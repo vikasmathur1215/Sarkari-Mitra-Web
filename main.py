@@ -1,5 +1,32 @@
 import streamlit as st
 import google.generativeai as genai
+# --- मिशन 2: सुंदर डिज़ाइन (CSS) ---
+st.markdown("""
+    <style>
+    /* पूरे ऐप का बैकग्राउंड */
+    .stApp {
+        background-color: #f8f9fa;
+    }
+    /* बटन्स को सुंदर बनाना */
+    .stButton>button {
+        border-radius: 20px;
+        border: 2px solid #ff4b4b;
+        background-color: white;
+        color: #ff4b4b;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: #ff4b4b;
+        color: white;
+    }
+    /* चैट मैसेज को गोल करना */
+    .stChatMessage {
+        border-radius: 15px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 # 1. API Setup
 if "GEMINI_API_KEY" in st.secrets:
