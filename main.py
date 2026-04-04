@@ -81,17 +81,29 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 6. Chat Input
+# 6. Chat Input & AI Response
 if prompt := st.chat_input("अपना सवाल यहाँ पूछें..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
-
+    
     with st.chat_message("assistant"):
         try:
-            system_msg = "तुम Sarthi AI हो। सरल Hinglish और पॉइंट्स में जवाब दो।"
-            response = model.generate_content(f"{system_msg}\n\nयूजर का सवाल: {prompt}")
+            # एआई को निर्देश देना
+            system_msg = "तुम Sarthi AI हो। सरल Hinglish में जवाब दो और डॉक्यूमेंट का पूरा ड्राफ्ट तैयार करो।"
+            response = model.generate_content(f"{system_msg}\n\nUser: {prompt}")
+            
+            # जवाब स्क्रीन पर दिखाना
             st.markdown(response.text)
             st.session_state.messages.append({"role": "assistant", "content": response.text})
+            
+            # डाउनलोड बटन (यहाँ जादू शुरू होता है)
+            st.download_button(
+                label="📩 इस डॉक्यूमेंट को डाउनलोड करें",
+                data=response.text,
+                file_name="Sarthi_Document.txt",
+                mime="text/plain"
+            )
+            
         except Exception as e:
-            st.error("माफ़ी चाहता हूँ, अभी सिस्टम थोड़ा बिज़ी है।")
+            st.error("माफ़ी चाहता हूँ, सिस्टम अभी कनेक्ट नहीं हो पा रहा।")
