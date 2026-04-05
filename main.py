@@ -43,8 +43,8 @@ st.markdown("""
 # --- 3. Gemini AI Setup ---
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    # 1.5-flash सबसे स्टेबल और तेज है
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # 2.5-flash सबसे स्टेबल और तेज है
+    model = genai.GenerativeModel('gemini-2.5-flash')
 else:
     st.error("System Error: API Key missing in Secrets.")
     st.stop()
